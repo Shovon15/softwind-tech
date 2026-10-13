@@ -1,0 +1,11 @@
+export { default as FacebookIcon } from "./Facebook";
+export { default as XIcon } from "./X";
+export { default as InstagramIcon } from "./Instagram";
+export { default as YoutubeIcon } from "./Youtube";
+export { default as LinkedinIcon } from "./Linkedin";
+export { default as WhatsAppIcon } from "./WhatsApp";
+export { default as PinterestIcon } from "./Pinterest";
+export { default as LeftArrowIcon } from "./SliderArrowIcon";
+export { default as RightArrowIcon } from "./RightArrow";
+export { default as PhoneIcon } from "./PhoneIcon";
+export { default as GoogleIcon } from "./Google";
