@@ -118,7 +118,7 @@ const ProjectVisual = ({ project }: { project: Project }) => (
   >
     <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_10%,rgba(255,255,255,0.35),transparent_45%)]" />
     {/* Mock app window */}
-    <div className="absolute top-[14%] left-[10%] right-[-6%] bottom-[-8%] rounded-tl-2xl border border-white/30 bg-white/15 shadow-2xl backdrop-blur-md">
+    <div className="absolute top-[14%] left-[10%] right-[-6%] bottom-[-8%] rounded-tl-2xl border border-white/30 bg-white/20 shadow-2xl">
       <div className="flex gap-1.5 border-b border-white/20 px-4 py-3">
         <span className="h-2.5 w-2.5 rounded-full bg-white/60" />
         <span className="h-2.5 w-2.5 rounded-full bg-white/40" />
@@ -178,128 +178,151 @@ const SelectedWork = () => {
       }
 
       const vh = () => window.innerHeight;
-      const STEP = 1; // timeline units per card change
-      const stepLength = () => vh() * 1.8; // scroll px per card change
-      const releaseUnits = 0.6;
-      const totalUnits = (cards.length - 1) * STEP + 0.5 + releaseUnits;
+      const stepLength = () => vh() * 1.1; // scroll px per card change
+      const lead = 0.35; // fraction of a step scrolled before the first switch
+      const hold = 1.1; // steps of scroll kept on the last card (incl. release)
+      const releaseSteps = 0.5; // final steps of the pin where the content drifts up
+      const pinLength = () => stepLength() * (cards.length - 1 + hold);
 
-      /* ---------- Approach: title + first card land softly ---------- */
-      gsap
-        .timeline({
-          scrollTrigger: {
-            trigger: section,
-            start: "top bottom",
-            end: "top top",
-            scrub: 1.8,
-            invalidateOnRefresh: true,
-          },
-        })
-        .fromTo(
-          content,
-          { y: () => -vh() * 0.2 },
-          { y: 0, ease: "power3.in", duration: 1 },
-          0,
-        )
-        .from(q("[data-eyebrow]"), { y: 20, autoAlpha: 0, duration: 0.3 }, 0.3)
-        .from(
-          q("[data-title-word]"),
-          { yPercent: 110, duration: 0.4, stagger: 0.06, ease: "power3.out" },
-          0.35,
-        )
-        // Animate the stage, not cards[0]: the pinned timeline below also drives cards[0]
-        // (fading it out), and two lagging scrubs on one element made it reappear behind
-        // the other cards after a fast scroll
-        .from(
-          q("[data-stage]"),
+      // Card states (transform + opacity only, so every frame stays on the GPU)
+      const BELOW = {
+        xPercent: 0,
+        yPercent: 35,
+        rotate: 0,
+        scale: 0.94,
+        autoAlpha: 0,
+      };
+      const SHOWN = {
+        xPercent: 0,
+        yPercent: 0,
+        rotate: 0,
+        scale: 1,
+        autoAlpha: 1,
+      };
+      // Cards leave to alternating sides: 1st left, 2nd right, 3rd left...
+      const SIDE = (i: number) => {
+        const dir = i % 2 === 0 ? -1 : 1;
+        return {
+          xPercent: 40 * dir,
+          yPercent: -4,
+          rotate: 6 * dir,
+          scale: 0.86,
+          autoAlpha: 0,
+        };
+      };
+
+      cards.forEach((card, i) => gsap.set(card, i === 0 ? SHOWN : BELOW));
+
+      let current = 0;
+      let z = cards.length + 1;
+
+      const reveal = (card: HTMLElement, delay: number) => {
+        gsap.fromTo(
+          card.querySelector("[data-visual]"),
+          { scale: 1.18 },
           {
-            y: () => vh() * 0.25,
-            scale: 0.92,
-            autoAlpha: 0,
-            duration: 0.55,
+            scale: 1,
+            duration: 1.6,
+            delay,
             ease: "power2.out",
+            overwrite: true,
           },
-          0.45,
+        );
+        gsap.fromTo(
+          card.querySelectorAll("[data-reveal]"),
+          { y: 30, autoAlpha: 0 },
+          {
+            y: 0,
+            autoAlpha: 1,
+            duration: 0.8,
+            delay: delay + 0.25,
+            stagger: 0.07,
+            ease: "power3.out",
+            overwrite: true,
+          },
+        );
+      };
+
+      // Plays a full, time-based transition whenever the active card changes,
+      // so it always looks smooth no matter how fast the user scrolls
+      const goTo = (next: number) => {
+        if (next === current) return;
+        const forward = next > current;
+        const prev = cards[current];
+        const incoming = cards[next];
+        current = next;
+        setActive(next);
+
+        // Cards skipped by a fast scroll jump straight to their resting state
+        cards.forEach((card, i) => {
+          if (card === prev || card === incoming) return;
+          gsap.killTweensOf(card);
+          gsap.set(card, i < next ? SIDE(i) : BELOW);
+        });
+
+        gsap.set(incoming, { zIndex: ++z });
+
+        if (forward) {
+          // Old card glides off to its side, new one fades up from the bottom
+          gsap.to(prev, {
+            ...SIDE(cards.indexOf(prev)),
+            duration: 1.1,
+            ease: "power2.inOut",
+            overwrite: true,
+          });
+          gsap.fromTo(incoming, BELOW, {
+            ...SHOWN,
+            duration: 1.2,
+            delay: 0.1,
+            ease: "power3.out",
+            overwrite: true,
+          });
+        } else {
+          // Reverse: current card sinks back down, previous one returns from the side it left to
+          gsap.to(prev, {
+            ...BELOW,
+            duration: 1,
+            ease: "power2.inOut",
+            overwrite: true,
+          });
+          gsap.fromTo(incoming, SIDE(next), {
+            ...SHOWN,
+            duration: 1.2,
+            delay: 0.1,
+            ease: "power3.out",
+            overwrite: true,
+          });
+        }
+        reveal(incoming, 0.1);
+      };
+
+      const indexFor = (scrolled: number) =>
+        gsap.utils.clamp(
+          0,
+          cards.length - 1,
+          Math.floor(scrolled / stepLength() - lead) + 1,
         );
 
-      /* ---------- Pinned: cards rise in one by one, previous slides off to the side ---------- */
+      /* ---------- Pinned: cards switch one by one; content drifts up at the end ---------- */
       const tl = gsap.timeline({
-        defaults: { ease: "power2.inOut" },
         scrollTrigger: {
           trigger: section,
           start: "top top",
-          end: () => `+=${(stepLength() * totalUnits) / STEP}`,
-          scrub: 1.8,
+          end: () => `+=${pinLength()}`,
+          scrub: 1.2,
           pin: true,
           invalidateOnRefresh: true,
-          onUpdate: (self) => {
-            const t = self.progress * totalUnits;
-            // Switch the counter at the midpoint of each transition (hold 0.25 + half of 0.8)
-            const index = Math.floor((t - 0.65) / STEP) + 1;
-            setActive(gsap.utils.clamp(0, cards.length - 1, index));
-          },
+          onUpdate: (self) => goTo(indexFor(self.scroll() - self.start)),
         },
       });
 
-      cards.forEach((card, i) => {
-        if (i === 0) return;
-        const prev = cards[i - 1];
-        const at = (i - 1) * STEP + 0.25; // small hold before the first switch
-
-        tl.fromTo(
-          card,
-          { yPercent: 115, rotate: 3, scale: 0.94 },
-          { yPercent: 0, rotate: 0, scale: 1, duration: STEP * 0.8 },
-          at,
-        )
-          .fromTo(
-            card.querySelector("[data-visual]"),
-            { scale: 1.25 },
-            { scale: 1, duration: STEP * 0.9, ease: "power2.out" },
-            at,
-          )
-          .fromTo(
-            card.querySelectorAll("[data-reveal]"),
-            { y: 40, autoAlpha: 0 },
-            {
-              y: 0,
-              autoAlpha: 1,
-              duration: STEP * 0.45,
-              stagger: 0.05,
-              ease: "power2.out",
-            },
-            at + STEP * 0.35,
-          )
-          // Previous card drifts off to the left, shrinking and fading
-          .fromTo(
-            prev,
-            {
-              xPercent: 0,
-              rotate: 0,
-              scale: 1,
-              autoAlpha: 1,
-              filter: "blur(0px)",
-            },
-            {
-              xPercent: -35,
-              rotate: -6,
-              scale: 0.82,
-              autoAlpha: 0,
-              filter: "blur(4px)",
-              duration: STEP * 0.8,
-              immediateRender: false,
-            },
-            at,
-          );
-      });
-
-      // Release: content starts drifting up before the pin lets go
-      tl.to({}, { duration: 0.25 }).fromTo(
+      tl.to({}, { duration: cards.length - 1 + hold - releaseSteps }).fromTo(
         content,
         { y: 0 },
         {
           y: () => -vh() * 0.2,
           ease: "power3.in",
-          duration: releaseUnits,
+          duration: releaseSteps,
           immediateRender: false,
         },
       );
