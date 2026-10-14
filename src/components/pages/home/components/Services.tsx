@@ -273,7 +273,7 @@ const Services = () => {
       ref={sectionRef}
       id="services"
       aria-labelledby="services-title"
-      className="relative h-[100dvh] w-full overflow-hidden bg-[#081212] text-white"
+      className="relative h-[100dvh] w-full overflow-hidden text-white"
     >
       <div
         aria-hidden

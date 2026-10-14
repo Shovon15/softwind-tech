@@ -116,7 +116,7 @@ const Banner = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative h-[100dvh] w-full overflow-hidden bg-[#081212] text-white"
+      className="relative h-[100dvh] w-full overflow-hidden text-white"
     >
       {/* Background */}
       <div

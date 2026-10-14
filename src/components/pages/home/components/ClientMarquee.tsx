@@ -301,7 +301,7 @@ const ClientMarquee = () => {
     <section
       ref={sectionRef}
       aria-label="Our clients"
-      className="relative w-full overflow-hidden border-y border-white/5 bg-[#081212] py-[clamp(56px,8vw,112px)] text-white"
+      className="relative w-full overflow-hidden border-y border-white/5 py-[clamp(56px,8vw,112px)] text-white"
     >
       <ContentContainer>
         <div

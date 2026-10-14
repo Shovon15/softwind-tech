@@ -347,7 +347,7 @@ const Testimonials = () => {
       ref={sectionRef}
       id="testimonials"
       aria-labelledby="testimonials-title"
-      className="relative w-full overflow-hidden bg-[#f4f4f1] py-[clamp(80px,12vw,160px)] text-[var(--foreground)]"
+      className="relative w-full overflow-hidden py-[clamp(80px,12vw,160px)] text-white"
     >
       <div
         aria-hidden
@@ -359,7 +359,7 @@ const Testimonials = () => {
           <div>
             <span
               data-eyebrow
-              className="mb-4 inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[0.2em] text-black/60 md:text-sm"
+              className="mb-4 inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[0.2em] text-white/60 md:text-sm"
             >
               <span className="h-px w-8 bg-[var(--primary)]" />
               Testimonials
@@ -395,7 +395,7 @@ const Testimonials = () => {
               <div
                 key={stat.label}
                 data-stat
-                className="border-l border-black/10 pl-4 md:pl-6"
+                className="border-l border-white/15 pl-4 md:pl-6"
               >
                 <dt className="sr-only">{stat.label}</dt>
                 <dd className="font-heading text-[clamp(1.75rem,3vw,2.75rem)] leading-none font-semibold">
@@ -406,7 +406,7 @@ const Testimonials = () => {
                 </dd>
                 <dd
                   aria-hidden
-                  className="mt-2 text-xs text-black/50 md:text-sm"
+                  className="mt-2 text-xs text-white/55 md:text-sm"
                 >
                   {stat.label}
                 </dd>

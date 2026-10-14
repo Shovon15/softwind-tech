@@ -110,11 +110,11 @@ const WhySoftwindTech = () => {
     <section
       ref={sectionRef}
       aria-labelledby="why-softwind-title"
-      className="relative h-[100dvh] w-full overflow-hidden bg-[#081212] text-[var(--foreground)]"
+      className="relative h-[100dvh] w-full overflow-hidden text-white"
     >
       <div
         data-card
-        className="absolute inset-0 flex items-center overflow-hidden bg-white will-change-transform"
+        className="absolute inset-0 flex items-center overflow-hidden bg-[#081212]/40 ring-1 ring-white/10 will-change-transform"
       >
         <div
           aria-hidden
@@ -123,7 +123,7 @@ const WhySoftwindTech = () => {
 
         <div data-content className="relative w-full will-change-transform">
           <ContentContainer className="relative h-auto w-full">
-            <span className="mb-6 inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[0.2em] text-black/60 md:mb-8 md:text-sm">
+            <span className="mb-6 inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[0.2em] text-white/60 md:mb-8 md:text-sm">
               <span className="h-px w-8 bg-[var(--primary)]" />
               Why Softwind Tech
             </span>

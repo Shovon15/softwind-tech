@@ -241,7 +241,7 @@ const Faq = () => {
       ref={sectionRef}
       id="faq"
       aria-labelledby="faq-title"
-      className="relative w-full overflow-hidden bg-[#081212] py-[clamp(80px,12vw,160px)] text-white"
+      className="relative w-full overflow-hidden py-[clamp(80px,12vw,160px)] text-white"
     >
       <div
         aria-hidden

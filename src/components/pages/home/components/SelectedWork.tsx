@@ -206,8 +206,11 @@ const SelectedWork = () => {
           { yPercent: 110, duration: 0.4, stagger: 0.06, ease: "power3.out" },
           0.35,
         )
+        // Animate the stage, not cards[0]: the pinned timeline below also drives cards[0]
+        // (fading it out), and two lagging scrubs on one element made it reappear behind
+        // the other cards after a fast scroll
         .from(
-          cards[0],
+          q("[data-stage]"),
           {
             y: () => vh() * 0.25,
             scale: 0.92,
@@ -309,7 +312,7 @@ const SelectedWork = () => {
       ref={sectionRef}
       id="selected-work"
       aria-labelledby="selected-work-title"
-      className="group/work relative h-[100dvh] w-full overflow-hidden bg-[#f4f4f1] text-[var(--foreground)] [&.is-static]:h-auto"
+      className="group/work relative h-[100dvh] w-full overflow-hidden text-white [&.is-static]:h-auto"
     >
       <div
         data-content
@@ -320,7 +323,7 @@ const SelectedWork = () => {
             <div>
               <span
                 data-eyebrow
-                className="mb-4 inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[0.2em] text-black/60 md:text-sm"
+                className="mb-4 inline-flex items-center gap-3 text-xs font-medium uppercase tracking-[0.2em] text-white/60 md:text-sm"
               >
                 <span className="h-px w-8 bg-[var(--primary)]" />
                 Selected Work
@@ -352,8 +355,8 @@ const SelectedWork = () => {
             </div>
 
             <div className="flex items-center gap-5">
-              <span className="font-heading text-sm text-black/50">
-                <span data-counter className="text-[var(--foreground)]">
+              <span className="font-heading text-sm text-white/50">
+                <span data-counter className="text-white">
                   01
                 </span>{" "}
                 / {pad(PROJECTS.length)}
@@ -363,7 +366,7 @@ const SelectedWork = () => {
                   <span
                     key={p.title}
                     data-dot
-                    className="h-1.5 w-1.5 rounded-full bg-black/20 transition-all duration-500 [&.is-active]:w-6 [&.is-active]:bg-[var(--primary)]"
+                    className="h-1.5 w-1.5 rounded-full bg-white/20 transition-all duration-500 [&.is-active]:w-6 [&.is-active]:bg-[var(--primary)]"
                   />
                 ))}
               </span>
@@ -372,13 +375,16 @@ const SelectedWork = () => {
         </ContentContainer>
 
         <ContentContainer className="relative h-auto min-h-0 flex-1">
-          <div className="relative h-full group-[.is-static]/work:space-y-6">
+          <div
+            data-stage
+            className="relative h-full group-[.is-static]/work:space-y-6"
+          >
             {PROJECTS.map((project, i) => (
               <article
                 key={project.title}
                 data-project
                 style={{ zIndex: i + 1 }}
-                className="absolute inset-0 grid origin-bottom grid-rows-[38%_1fr] overflow-hidden rounded-3xl bg-white shadow-[0_30px_80px_-30px_rgba(8,18,18,0.35)] ring-1 ring-black/5 will-change-transform md:grid-cols-2 md:grid-rows-1 group-[.is-static]/work:relative group-[.is-static]/work:min-h-[560px]"
+                className="absolute inset-0 grid origin-bottom grid-rows-[38%_1fr] overflow-hidden rounded-3xl bg-gradient-to-br from-[#122626] via-[#0d1c1c] to-[#091414] text-white shadow-[0_40px_100px_-30px_rgba(0,0,0,0.8)] ring-1 ring-white/10 will-change-transform md:grid-cols-2 md:grid-rows-1 group-[.is-static]/work:relative group-[.is-static]/work:min-h-[560px]"
               >
                 <div className="relative overflow-hidden md:order-2">
                   <div
@@ -392,10 +398,10 @@ const SelectedWork = () => {
                 <div className="flex flex-col justify-center gap-4 overflow-hidden p-6 md:gap-5 md:p-10 xl:p-14">
                   <div
                     data-reveal
-                    className="flex items-center gap-3 text-xs font-medium uppercase tracking-[0.18em] text-black/50"
+                    className="flex items-center gap-3 text-xs font-medium uppercase tracking-[0.18em] text-white/50"
                   >
                     <span className="text-primary">{pad(i + 1)}</span>
-                    <span className="h-px w-6 bg-black/20" />
+                    <span className="h-px w-6 bg-white/20" />
                     {project.category} · {project.year}
                   </div>
 
@@ -408,7 +414,7 @@ const SelectedWork = () => {
 
                   <p
                     data-reveal
-                    className="max-w-lg text-sm leading-relaxed text-black/60 md:text-base"
+                    className="max-w-lg text-sm leading-relaxed text-white/60 md:text-base"
                   >
                     {project.description}
                   </p>
@@ -418,7 +424,7 @@ const SelectedWork = () => {
                       <li
                         key={point}
                         data-reveal
-                        className="flex items-start gap-3 text-sm text-black/80 md:text-[15px]"
+                        className="flex items-start gap-3 text-sm text-white/80 md:text-[15px]"
                       >
                         <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-[var(--primary)]/10 text-[var(--primary)]">
                           <svg
@@ -445,7 +451,7 @@ const SelectedWork = () => {
                     {project.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="rounded-full border border-black/10 px-3 py-1 text-xs text-black/70"
+                        className="rounded-full border border-white/15 px-3 py-1 text-xs text-white/70"
                       >
                         {tag}
                       </span>
@@ -459,7 +465,7 @@ const SelectedWork = () => {
                       className="group/link inline-flex items-center gap-2 text-sm font-medium"
                     >
                       View case study
-                      <span className="flex h-8 w-8 items-center justify-center rounded-full border border-black/15 transition-all duration-300 group-hover/link:translate-x-1 group-hover/link:border-[var(--primary)] group-hover/link:bg-[var(--primary)] group-hover/link:text-white">
+                      <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/20 transition-all duration-300 group-hover/link:translate-x-1 group-hover/link:border-[var(--primary)] group-hover/link:bg-[var(--primary)] group-hover/link:text-white">
                         <svg
                           viewBox="0 0 24 24"
                           className="h-4 w-4"

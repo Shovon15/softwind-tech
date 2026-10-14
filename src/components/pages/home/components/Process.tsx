@@ -321,7 +321,7 @@ const Process = () => {
       ref={sectionRef}
       id="process"
       aria-labelledby="process-title"
-      className="relative w-full overflow-hidden bg-[#081212] py-24 text-white md:h-[100dvh] md:py-0"
+      className="relative w-full overflow-hidden py-24 text-white md:h-[100dvh] md:py-0"
     >
       <div
         aria-hidden

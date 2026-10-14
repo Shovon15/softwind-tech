@@ -15,6 +15,7 @@ import Process from "@/components/pages/home/components/Process";
 import Testimonials from "@/components/pages/home/components/Testimonials";
 import Faq from "@/components/pages/home/components/Faq";
 import ContactCta from "@/components/pages/home/components/ContactCta";
+import TechBackground from "@/components/pages/home/techScene/TechBackground";
 
 export async function generateMetadata(): Promise<Metadata> {
   return await GetMetaData({
@@ -26,15 +27,21 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function Home() {
   return (
     <SchemaWrapper jsonLd={getHomeJsonLd()}>
-      <Banner />
-      <ClientMarquee />
-      <WhySoftwindTech />
-      <Services />
-      <SelectedWork />
-      <Process />
-      <Testimonials />
-      <Faq />
-      <ContactCta />
+      {/* One dark canvas for the whole page: sections are transparent over the 3D scene */}
+      <div className="relative isolate bg-[#081212]">
+        <TechBackground />
+        <div className="relative z-10">
+          <Banner />
+          <ClientMarquee />
+          <WhySoftwindTech />
+          <Services />
+          <SelectedWork />
+          <Process />
+          <Testimonials />
+          <Faq />
+          <ContactCta />
+        </div>
+      </div>
     </SchemaWrapper>
   );
 }

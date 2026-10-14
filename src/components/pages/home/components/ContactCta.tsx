@@ -139,7 +139,7 @@ const ContactCta = () => {
       ref={sectionRef}
       id="contact"
       aria-labelledby="contact-title"
-      className="relative w-full overflow-hidden bg-[#081212] pt-[clamp(40px,6vw,80px)] pb-[clamp(60px,8vw,120px)]"
+      className="relative w-full overflow-hidden pt-[clamp(40px,6vw,80px)] pb-[clamp(60px,8vw,120px)]"
     >
       <ContentContainer className="h-auto">
         <div
