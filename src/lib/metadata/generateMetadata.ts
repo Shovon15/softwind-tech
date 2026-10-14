@@ -52,7 +52,6 @@ export const metaDataGenerator = ({
 
   return {
     metadataBase,
-    icons: { icon: "/favicon.ico" },
     title: {
       default: title ?? metaTitle,
       template: `%s | ${SITE_INFORMATION.appName}`,
