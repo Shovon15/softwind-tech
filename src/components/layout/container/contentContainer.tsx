@@ -30,7 +30,7 @@ const ContentContainer = forwardRef<HTMLDivElement, Props>(
       <div
         ref={ref}
         className={cn(
-          "2xl:px-[16.67vw] lg:px-[13.67vw] px-4 h-full",
+          "px-4 md:px-[7vw] 2xl:px-[9vw] h-full",
           padding,
           className,
         )}

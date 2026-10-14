@@ -13,12 +13,12 @@ export const useSmoothScroll = () => {
   useEffect(() => {
     // Initialize Lenis smooth scroll
     const lenisInstance = new Lenis({
-      duration: 1.5,
+      duration: 1.8,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
       smoothWheel: true,
-      wheelMultiplier: 2,
-      touchMultiplier: 2,
+      wheelMultiplier: 1.2,
+      touchMultiplier: 1.5,
     });
 
     (window as any).__lenis = lenisInstance;
@@ -48,7 +48,7 @@ export const useSmoothScroll = () => {
           if (targetElement) {
             lenisInstance.scrollTo(targetElement, {
               offset: -80,
-              duration: 1.5,
+              duration: 1.8,
             });
           }
         }

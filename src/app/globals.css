@@ -561,3 +561,25 @@ body {
 .menuIcon--v8.is-closed .menuIcon__line--bottom {
   stroke-dasharray: 25 85; /* tweak 28 to taste (26/30 etc.) */
 }
+
+/* Header: red light that travels along the top edge */
+.header-sheen {
+  animation: headerSheen 6s ease-in-out infinite;
+}
+
+@keyframes headerSheen {
+  0% {
+    transform: translateX(-100%);
+  }
+  60%,
+  100% {
+    transform: translateX(300%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header-sheen {
+    animation: none;
+    opacity: 0;
+  }
+}

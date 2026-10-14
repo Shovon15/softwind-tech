@@ -6,6 +6,15 @@ import { SITE_INFORMATION } from "@/config/seo";
 import { GetMetaData } from "@/lib/metadata/getMetaData";
 import { getHomeJsonLd } from "@/lib/metadata/jsonLdSchemas/homeLd";
 import { Metadata } from "next";
+import Banner from "@/components/pages/home/components/Banner";
+import ClientMarquee from "@/components/pages/home/components/ClientMarquee";
+import WhySoftwindTech from "@/components/pages/home/components/WhySoftwindTech";
+import Services from "@/components/pages/home/components/Services";
+import SelectedWork from "@/components/pages/home/components/SelectedWork";
+import Process from "@/components/pages/home/components/Process";
+import Testimonials from "@/components/pages/home/components/Testimonials";
+import Faq from "@/components/pages/home/components/Faq";
+import ContactCta from "@/components/pages/home/components/ContactCta";
 
 export async function generateMetadata(): Promise<Metadata> {
   return await GetMetaData({
@@ -17,14 +26,15 @@ export async function generateMetadata(): Promise<Metadata> {
 export default function Home() {
   return (
     <SchemaWrapper jsonLd={getHomeJsonLd()}>
-      <ContentContainer className="flex min-h-[70dvh] flex-col items-center justify-center gap-4 pt-40 pb-20 text-center">
-        <h1 className="font-heading text-4xl lg:text-6xl">
-          {SITE_INFORMATION.appName}
-        </h1>
-        <p className="font-body max-w-xl text-lg">
-          {SITE_INFORMATION.metaDescription}
-        </p>
-      </ContentContainer>
+      <Banner />
+      <ClientMarquee />
+      <WhySoftwindTech />
+      <Services />
+      <SelectedWork />
+      <Process />
+      <Testimonials />
+      <Faq />
+      <ContactCta />
     </SchemaWrapper>
   );
 }

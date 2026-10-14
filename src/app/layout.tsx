@@ -3,6 +3,7 @@ import "./globals.css";
 import { BodyFont, HeadingFont } from "./font";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
+import BackToTop from "@/components/common/button/BackToTop";
 import SmoothScroll from "@/components/layout/container/SmoothScroll";
 import ReduxProvider from "@/store/provider";
 import ToastListener from "@/components/common/toast/toastListener";
@@ -54,6 +55,7 @@ export default function RootLayout({
               {children}
             </div>
             <Footer />
+            <BackToTop />
           </SmoothScroll>
           <ToastListener />
         </ReduxProvider>
