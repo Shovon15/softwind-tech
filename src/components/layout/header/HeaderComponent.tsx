@@ -230,7 +230,7 @@ const HeaderComponent = ({ data }: any) => {
                 aria-expanded={isMobileMenuOpen}
                 aria-controls="mobile-menu"
                 onClick={() => setIsMobileMenuOpen((open) => !open)}
-                className="flex h-[46px] w-[46px] items-center justify-center rounded-full border border-white/15 bg-white/5 p-2.5 focus:outline-none lg:hidden [&_.menuIcon__line]:!stroke-white"
+                className="flex h-[46px] w-[46px] items-center justify-center rounded-full border border-white/15 bg-white/5 p-2.5 text-white focus:outline-none lg:hidden"
               >
                 <Hamburger isOpen={isMobileMenuOpen} />
               </button>
